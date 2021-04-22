@@ -6,9 +6,9 @@ export default function Footer() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        JamSpace 
       </Link>
-      {new Date().getFullYear()}
+       {new Date().getFullYear()}
     </Typography>
   );
 }

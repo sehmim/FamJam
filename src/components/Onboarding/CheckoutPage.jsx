@@ -19,18 +19,45 @@ import checkoutFormModel from './FormModel/checkoutFormModel';
 import formInitialValues from './FormModel/formInitialValues';
 
 import useStyles from './styles';
+import InternetCheck from './InternetCheck/InternetCheck';
+import InterfaceCheck from './InterfaceCheck/InterfaceCheck';
+import InterestsCheck from './InterestsCheck/InterestsCheck';
+import InsightsCheck from './InsightsCheck/InsightsCheck';
+import { Link } from 'react-router-dom';
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = [
+  {
+    stepText : 'Internet Speed' ,
+    stepIcon : ""
+  },
+  {
+    stepText : 'Interface' ,
+    stepIcon : ""
+  },
+  {
+    stepText : 'Interests' ,
+    stepIcon : ""
+  },
+  {
+    stepText : 'Insights' ,
+    stepIcon : ""
+  }
+];
 const { formId, formField } = checkoutFormModel;
 
 function _renderStepContent(step) {
   switch (step) {
     case 0:
-      return <AddressForm formField={formField} />;
+      // return <AddressForm formField={formField} />;
+      return <InternetCheck  />
     case 1:
-      return <PaymentForm formField={formField} />;
+      return <InterfaceCheck  />
+      // return <PaymentForm formField={formField} />;
     case 2:
-      return <ReviewOrder />;
+      return <InterestsCheck />
+      // return <PaymentForm  />;
+    case 3:
+      return <InsightsCheck />;
     default:
       return <div>Not Found</div>;
   }
@@ -41,17 +68,17 @@ export default function CheckoutPage() {
   const [activeStep, setActiveStep] = useState(0);
   const currentValidationSchema = validationSchema[activeStep];
   const isLastStep = activeStep === steps.length - 1;
+  const [isSubmitting , setIsSubmitting] = useState(false)
 
   function _sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   async function _submitForm(values, actions) {
-    await _sleep(1000);
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
+    setIsSubmitting(true)
 
     setActiveStep(activeStep + 1);
+    setIsSubmitting(false)
   }
 
   function _handleSubmit(values, actions) {
@@ -70,18 +97,19 @@ export default function CheckoutPage() {
 
   return (
     <React.Fragment>
-      <Typography component="h1" variant="h4" align="center">
-        Checkout
+      <Typography p="5" component="h1" variant="h4" align="center">
+        RIFFS HUB LOGO PLACEHOLDER
       </Typography>
+
       <Stepper activeStep={activeStep} className={classes.stepper}>
-        {steps.map(label => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+        {steps.map((label, index) => (
+          <Step key={index}>
+            <StepLabel>{label.stepText}</StepLabel>
           </Step>
         ))}
       </Stepper>
       <React.Fragment>
-        {activeStep === steps.length ? (
+        {/* {activeStep === steps.length ? (
           <CheckoutSuccess />
         ) : (
           <Formik
@@ -90,7 +118,7 @@ export default function CheckoutPage() {
             onSubmit={_handleSubmit}
           >
             {({ isSubmitting }) => (
-              <Form id={formId}>
+              <Form id={formId}> */}
                 {_renderStepContent(activeStep)}
 
                 <div className={classes.buttons}>
@@ -100,27 +128,36 @@ export default function CheckoutPage() {
                     </Button>
                   )}
                   <div className={classes.wrapper}>
-                    <Button
-                      disabled={isSubmitting}
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                    >
-                      {isLastStep ? 'Place order' : 'Next'}
-                    </Button>
-                    {isSubmitting && (
-                      <CircularProgress
+                    {
+                      isLastStep ?                         
+                      <Link to="/room">
+                        <Button>Start Jam</Button>
+                      </Link>
+                    :                   
+                      <Button
+                        disabled={isSubmitting}
+                        onClick={_submitForm}
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                      >
+                      Next
+                      </Button>
+                    }
+
+                    {/* {isSubmitting && ( */}
+                      {/* <CircularProgress
                         size={24}
                         className={classes.buttonProgress}
-                      />
-                    )}
+                      /> */}
+                    {/* )} */}
                   </div>
                 </div>
-              </Form>
+              {/* </Form>
             )}
-          </Formik>
-        )}
+          </Formik> */}
+        {/* )} */}
       </React.Fragment>
     </React.Fragment>
   );

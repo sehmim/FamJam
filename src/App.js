@@ -1,13 +1,22 @@
 import React from 'react';
-import MaterialLayout from './components/Layout/MaterialLayout';
-import CheckoutPage from './components/CheckoutPage';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import OnboardingPage from './pages/Onboarding';
+import CreateRoom from './routes/CreateRoom';
+import Room from './routes/Room';
+
+
 
 function App() {
   return (
-    <div>
-      <MaterialLayout>
-        <CheckoutPage />
-      </MaterialLayout>
+
+    <div className="App">
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={OnboardingPage} />
+        <Route path="/room" component={CreateRoom} />
+        <Route path="/room/:roomID" component={Room} />
+      </Switch>
+    </BrowserRouter>
     </div>
   );
 }
